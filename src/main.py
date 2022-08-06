@@ -3,20 +3,31 @@ from utils import imageprepare
 import pickle
 import shutil
 from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse
 import os
 
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def root():
-    return {"message": "Hello World"}
+        return """
+            <html>
+                <head>
+                    <title>SFL ML API</title>
+                </head>
+                <body>
+                    <h1>Fashion Classification API</h1>
+                </body>
+            </html>
+            """
 
 @app.post("/")
 async def predict_clothing(file: UploadFile = File(...)):
     # validate file type is jpg, jpeg, or png
     if file.content_type not in ('image/jpg', 'image/jpeg', 'image/png'):
         return { "Error": "File must be jpg, jpeg, or png format."}
+    
     with open(f'{file.filename}', 'wb') as buffer:
         shutil.copyfileobj(file.file, buffer)
     prepared_image = imageprepare(file.filename)

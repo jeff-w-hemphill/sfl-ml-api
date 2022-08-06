@@ -3,7 +3,6 @@ from PIL import Image
 import numpy as np
 
 
-
 def imageprepare(file):
     """Takes in jpg, jpeg, or png pictures."""
     image_1d = imageprepare_1d(file)
